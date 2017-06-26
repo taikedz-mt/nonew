@@ -4,7 +4,9 @@ nonew.data = minetest.get_worldpath().."/blocked_nonew.txt"
 
 nonew.action = function(playername)
 	if nonew.players[playername] == 1 then
-		minetest.kick_player(playername, "No new players are being accepted at the moment.")
+		minetest.after(0, function()
+			minetest.kick_player(playername, "No new players are being accepted at the moment.")
+		end)
 	end
 end
 
