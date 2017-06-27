@@ -41,6 +41,10 @@ local function register_newcomer(playername)
 	write_blocked_players()
 end
 
+minetest.register_on_joinplayer(function(player)
+	nonew.action( player:get_player_name() )
+end)
+
 minetest.register_on_newplayer(function(player)
 	local playername = player:get_player_name()
 	register_newcomer(playername)
