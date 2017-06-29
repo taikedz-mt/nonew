@@ -2,7 +2,15 @@ nonew = {}
 nonew.players = {}
 nonew.data = minetest.get_worldpath().."/blocked_nonew.txt"
 
-nonew.action = function(playername)
+nonew.state = true
+if minetest.setting_get("nonew.state") == 'off' then
+	nonew.state = false
+end
+
+-- This can be overridden with another function
+function nonew:action(playername)
+	if not nonew.state then return end
+
 	if nonew.players[playername] == 1 then
 		minetest.after(0, function()
 			minetest.kick_player(playername, "No new players are being accepted at the moment.")
@@ -36,19 +44,35 @@ local function read_blocked_players()
 	nonew.players = minetest.deserialize(sdata)
 end
 
-local function register_newcomer(playername)
-	nonew.players[playername] = 1
+function nonew:unblock(playername)
+	if not playername then return end
+
+	nonew.players[playername] = nil
 	write_blocked_players()
 end
 
-minetest.register_on_joinplayer(function(player)
-	nonew.action( player:get_player_name() )
-end)
+function nonew:block(playername)
+	if not playername then return end
+
+	nonew.players[playername] = 1
+	write_blocked_players()
+
+	if minetest.get_player_by_name(playername) then
+		nonew:action(playername)
+	end
+end
 
 minetest.register_on_newplayer(function(player)
 	local playername = player:get_player_name()
-	register_newcomer(playername)
-	nonew.action(playername)
+	nonew:block(playername)
+	nonew:action(playername)
+end)
+
+minetest.register_on_prejoinplayer(function(playername, ip)
+	-- If they are already in the block list, just get them here
+	nonew:action(playername)
 end)
 
 read_blocked_players()
+
+dofile(minetest.get_modpath("nonew").."/commands.lua")
