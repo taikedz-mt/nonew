@@ -21,6 +21,11 @@ function nonew:action(playername)
 	end
 end
 
+function nonew:unblock_all()
+	nonew.players = {}
+	write_blocked_players()
+end
+
 local function write_blocked_players()
 	local sdata = minetest.serialize(nonew.players)
 

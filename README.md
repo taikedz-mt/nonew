@@ -26,6 +26,8 @@ Whether to kick newly created players
 
 ## Commands
 
+Comands require the `nonew` privilege.
+
 * `nn_state [ on | off]`
 
 Without arguments, displays the general state of NoNew ; else sets its state
@@ -37,4 +39,8 @@ Adds a player to the block list and kick them if `nonew.state` is on
 * `nn_unblock <player>`
 
 Removes a player form the block list ; only effective if the player had already previously joined.
+
+* `nn_unblockall`
+
+Unblock all players - do this after you have banned the accounts you needed to.
 

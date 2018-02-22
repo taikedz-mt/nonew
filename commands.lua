@@ -10,6 +10,14 @@ local function tokenize(argstring)
 	return args
 end
 
+minetest.register_chatcommand("nn_unblockall", {
+	description = "Unblock all players",
+	privs = {nonew = true},
+	func = function(caller, argstring)
+		nonew:unblock_all()
+	end,
+})
+
 minetest.register_chatcommand("nn_unblock", {
 	description = "Unblock players",
 	privs = {nonew = true},
