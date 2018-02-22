@@ -17,8 +17,9 @@ minetest.register_chatcommand("nn_unblock", {
 	func = function(caller, argstring)
 		local tokens = tokenize(argstring)
 	
-		for playername in tokens do
-			nonew:unblock( playername )
+		for i = 1, #tokens do
+			minetest.debug("NoNew: "..caller.." unblocks "..tokens[i])
+			nonew:unblock( tokens[i] )
 		end
 	end,
 })
@@ -30,8 +31,9 @@ minetest.register_chatcommand("nn_block", {
 	func = function(caller, argstring)
 		local tokens = tokenize(argstring)
 	
-		for playername in tokens do
-			nonew:block( playername )
+		for i = 1, #tokens do
+			minetest.debug("NoNew: "..caller.." blocks "..tokens[i])
+			nonew:block( tokens[i] )
 		end
 	end,
 })
@@ -44,12 +46,9 @@ local function setstate(caller, argstring, option)
 		nonew[option] = true
 	elseif value == 'off' then
 		nonew[option] = false
-	else
-		minetest.chat_send_player(caller, "Invalid option for "..option.." - please choose on or off.")
-		return
 	end
 
-	minetest.chat_send_player(caller, "NoNew "..option..": "..nonew[option])
+	minetest.chat_send_player(caller, "NoNew "..option..": "..tostring(nonew[option]) )
 end
 
 minetest.register_chatcommand("nn_state",{

@@ -11,10 +11,13 @@ end
 function nonew:action(playername)
 	if not nonew.state then return end
 
+	disconnect_string = "No new players are being accepted at the moment."
+
 	if nonew.players[playername] == 1 then
 		minetest.after(0, function()
-			minetest.kick_player(playername, "No new players are being accepted at the moment.")
+			minetest.kick_player(playername, disconnect_string)
 		end)
+		return disconnect_string
 	end
 end
 
@@ -70,7 +73,7 @@ end)
 
 minetest.register_on_prejoinplayer(function(playername, ip)
 	-- If they are already in the block list, just get them here
-	nonew:action(playername)
+	return nonew:action(playername)
 end)
 
 read_blocked_players()
